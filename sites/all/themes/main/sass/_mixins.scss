@@ -36,6 +36,9 @@
   }
 }
 
+/*
+//Disabled till needed so sass will compile
+
 $sprites: sprite-map("sprites/*.png", $spacing: 15px);
 $sprites_retina: sprite-map("sprites2x/*.png", $spacing: 30px);
 
@@ -57,3 +60,4 @@ $sprites_retina: sprite-map("sprites2x/*.png", $spacing: 30px);
     background-image: sprite-url($sprites-retina);
   }
 }
+*/
