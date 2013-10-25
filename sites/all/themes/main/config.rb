@@ -24,15 +24,7 @@ images_dir      = "images"
 javascripts_dir = "js"
 
 
-# Require any additional compass plugins installed on your system.
-#require 'ninesixty'
-#require 'zen-grids'
-
-# Assuming this theme is in sites/*/themes/THEMENAME, you can add the partials
-# included with a module by uncommenting and modifying one of the lines below:
-#add_import_path "../../../default/modules/FOO"
-#add_import_path "../../../all/modules/FOO"
-#add_import_path "../../../../modules/FOO"
+require 'sass-globbing'
 
 
 ##
