@@ -104,6 +104,10 @@ $nav-height: 3em;
 $tabs-container-bg: #fff;
 $tabs-border: #bbb;
 
+// Sprite width
+// Once the sprites are generated, update the width of the non retina sprite
+$normal-sprite-width: 200px;
+
 
 // =============================================================================
 // Partials to be shared with all .scss files.

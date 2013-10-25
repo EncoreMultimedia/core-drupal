@@ -35,3 +35,25 @@
     @include element-invisible-off;
   }
 }
+
+$sprites: sprite-map("sprites/*.png", $spacing: 15px);
+$sprites_retina: sprite-map("sprites2x/*.png", $spacing: 30px);
+
+@mixin sprite-background($name) {
+  background-image: sprite-url($sprites);
+  background-position: sprite-position($sprites, $name);
+  background-repeat: no-repeat;
+  display: block;
+  height: image-height(sprite-file($sprites, $name));
+  width: image-width(sprite-file($sprites, $name));
+  @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
+    // Workaround for https://gist.github.com/2140082
+    @if (sprite-position($sprites, $name) != sprite-position($sprites_retina, $name)) {
+      $ypos: round(nth(sprite-position($sprites_retina, $name), 2) / 2);
+      background-position: 0 $ypos;
+    }
+    // Hard coded width of the normal sprite image. There must be a smarter way to do this.
+    @include background-size($normal-sprite-width auto);
+    background-image: sprite-url($sprites-retina);
+  }
+}
