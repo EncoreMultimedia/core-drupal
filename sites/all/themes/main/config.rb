@@ -17,11 +17,13 @@ firesass = false
 
 
 # Location of the theme's resources.
-css_dir         = "css"
-sass_dir        = "sass"
-extensions_dir  = "sass-extensions"
-images_dir      = "images"
-javascripts_dir = "js"
+css_dir                    = "css"
+sass_dir                   = "sass"
+extensions_dir             = "sass-extensions"
+images_dir                 = "src/images"
+http_images_path           = "../images"
+http_generated_images_path = "../images"
+javascripts_dir            = "js"
 
 
 require 'sass-globbing'
@@ -38,7 +40,7 @@ output_style = (environment == :development) ? :expanded : :compressed
 # To enable relative paths to assets via compass helper functions. Since Drupal
 # themes can be installed in multiple locations, we don't need to worry about
 # the absolute path to the theme from the server root.
-relative_assets = true
+#relative_assets = true
 
 # To disable debugging comments that display the original location of your selectors. Uncomment:
 # line_comments = false
