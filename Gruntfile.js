@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,                  // Enable dynamic expansion
           cwd: 'src/images',             // Src matches are relative to this path
-          src: ['**/*.{png,jpg,gif}'],   // Actual patterns to match
+          src: ['**/*.{png,jpg,gif}', "!sprites/**/*.{png,jpg,gif}", "!sprites2x/**/*.{png,jpg,gif}"],   // Actual patterns to match
           dest: 'images/'                // Destination path prefix
         }]
       }
@@ -65,7 +65,7 @@ module.exports = function (grunt) {
       css: {
         // if Sass files change, run the compass task
         files: ['sass/**/*.scss'],
-        tasks: ['compass', 'cssmin'],
+        tasks: ['compass'],
       },
       // LiveReload whenever specified files change,
       // using browser extension: http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-
