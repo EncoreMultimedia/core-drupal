@@ -3,13 +3,6 @@ sites/default/private
 sites/default/settings.php
 cache/
 files/
-README.txt
-CHANGELOG.txt
-COPYRIGHT.txt
-INSTALL*.txt
-LICENSE.txt
-MAINTAINERS.txt
-UPGRADE.txt
 robots.txt
 .DS_Store
 .sass-cache/
@@ -18,6 +11,7 @@ robots.txt
 sites/all/themes/main/css
 sites/all/themes/main/images
 sites/all/themes/main/js
+node_modules
 *.sublime-project
 *.sublime-workspace
 dbbackup
