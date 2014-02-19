@@ -13,8 +13,11 @@ function _webform_defaults_phone() {
     'mandatory' => 0,
     'pid'       => 0,
     'weight'    => 0,
+    'value'     => '',
     'extra'     => array(
       'title_display'              => 0,
+      'width'                      => '',
+      'disabled'                   => FALSE,
       'private'                    => FALSE,
       'attributes'                 => array(),
       'description'                => '',
@@ -71,7 +74,7 @@ function _webform_edit_phone($component) {
     '#value'  => t('International phone numbers are in the form +XX YYYYYYY where XX is a country code and YYYYYYY is the local number. This field type is based off of the <a href="http://www.itu.int/rec/T-REC-E.123/en">E.123 specification</a>.'),
     '#states' => array(
       'visible' => array( // action to take.
-        ':input[name="extra[country]"]' => array( 'value' => 'int' ),
+                          ':input[name="extra[country]"]' => array( 'value' => 'int' ),
       ),
     ),
   );
@@ -81,7 +84,7 @@ function _webform_edit_phone($component) {
     '#default_value' => $component['extra']['phone_default_country_code'],
     '#states'        => array(
       'visible' => array( // action to take.
-        ':input[name="extra[country]"]' => array( 'value' => 'int' ),
+                          ':input[name="extra[country]"]' => array( 'value' => 'int' ),
       ),
     ),
   );
@@ -91,7 +94,7 @@ function _webform_edit_phone($component) {
     '#default_value' => $component['extra']['phone_int_max_length'],
     '#states'        => array(
       'visible' => array( // action to take.
-        ':input[name="extra[country]"]' => array( 'value' => 'int' ),
+                          ':input[name="extra[country]"]' => array( 'value' => 'int' ),
       ),
     ),
   );
@@ -103,7 +106,7 @@ function _webform_edit_phone($component) {
     '#size'          => 2,
     '#states'        => array(
       'visible' => array( // action to take.
-        ':input[name="extra[country]"]' => array( 'value' => 'ca' ),
+                          ':input[name="extra[country]"]' => array( 'value' => 'ca' ),
       ),
     ),
   );
@@ -113,9 +116,37 @@ function _webform_edit_phone($component) {
     '#default_value' => $component['extra']['ca_phone_parentheses'],
     '#states'        => array(
       'visible' => array( // action to take.
-        ':input[name="extra[country]"]' => array( 'value' => 'ca' ),
+                          ':input[name="extra[country]"]' => array( 'value' => 'ca' ),
       ),
     ),
+  );
+  $form['value'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Default value'),
+    '#default_value' => $component['value'],
+    '#description'   => t('The default value of the field.') . theme('webform_token_help'),
+    '#size'          => 60,
+    '#maxlength'     => 1024,
+    '#weight'        => 0,
+  );
+  $form['display']['width'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Width'),
+    '#default_value' => $component['extra']['width'],
+    '#description'   => t('Width of the textfield.') . ' ' . t('Leaving blank will use the default size.'),
+    '#size'          => 5,
+    '#maxlength'     => 10,
+    '#weight'        => 0,
+    '#parents'       => array( 'extra', 'width' ),
+  );
+  $form['display']['disabled'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Disabled'),
+    '#return_value'  => 1,
+    '#description'   => t('Make this field non-editable. Useful for setting an unchangeable default value.'),
+    '#weight'        => 11,
+    '#default_value' => $component['extra']['disabled'],
+    '#parents'       => array( 'extra', 'disabled' ),
   );
   return $form;
 }
@@ -138,16 +169,20 @@ function _webform_edit_phone($component) {
  * @see _webform_client_form_add_component()
  */
 function _webform_render_phone($component, $value = NULL, $filter = TRUE) {
+  //TODO: change these to use non-private functions (no _) if/when webform 3.x is entirely deprecated
   $form_item = array(
     '#type'             => module_exists('elements') ? 'telfield' : 'textfield',
+    //    '#default_value'    => $filter ? webform_replace_tokens($component['value'], NULL, NULL, NULL, TRUE) : $component['value'],
     '#default_value'    => $filter ? _webform_filter_values($component['value']) : $component['value'],
     '#attributes'       => $component['extra']['attributes'],
     '#theme_wrappers'   => array( 'webform_element' ),
+    //    '#description'      => $filter ? webform_filter_descriptions($component['extra']['description']) : $component['extra']['description'],
     '#description'      => $filter ? _webform_filter_descriptions($component['extra']['description']) : $component['extra']['description'],
     '#element_validate' => array( 'webform_validate_phone' ),
     '#maxlength'        => ( $component['extra']['country'] == 'int' ? ( isset( $component['extra']['phone_int_max_length'] ) ? $component['extra']['phone_int_max_length'] : NULL ) : NULL ),
     '#required'         => $component['required'] || $component['mandatory'], //Either one being true will could as required...because webform changed in 4.x-alpha8
     '#size'             => 17,
+    //    '#title'            => $filter ? webform_filter_xss($component['name']) : $component['name'],
     '#title'            => $filter ? _webform_filter_xss($component['name']) : $component['name'],
     '#title_display'    => $component['extra']['title_display'] ? $component['extra']['title_display'] : 'before',
     '#weight'           => $component['weight'],
@@ -157,6 +192,21 @@ function _webform_render_phone($component, $value = NULL, $filter = TRUE) {
     ),
   );
   if ( isset( $value ) ) {
+    $form_item['#default_value'] = $value[0];
+  }
+  // Change the 'width' option to the correct 'size' option.
+  if ( $component['extra']['width'] > 0 ) {
+    $form_item['#size'] = $component['extra']['width'];
+  }
+  if ( $component['extra']['disabled'] ) {
+    if ( $filter ) {
+      $form_item['#attributes']['readonly'] = 'readonly';
+    }
+    else {
+      $form_item['#disabled'] = TRUE;
+    }
+  }
+  if ( isset( $value[0] ) ) {
     $form_item['#default_value'] = $value[0];
   }
   return $form_item;
