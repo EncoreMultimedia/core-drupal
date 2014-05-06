@@ -12,7 +12,7 @@ sprites2x-*.png
 sites/all/themes/main/css
 sites/all/themes/main/images
 sites/all/themes/main/js/script.js
+sites/all/themes/main/src/css
 *.sublime-project
 *.sublime-workspace
-dbbackup
 node_modules
