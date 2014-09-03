@@ -17,30 +17,6 @@
 // =============================================================================
 
 //
-// Legacy IE support
-//
-// These variables are used by many mixins to add additional CSS to support
-// specific versions of IE or specific vendor prefixes.
-//
-// IE6-7 don't support box-sizing: border-box. We can fix this in 1 of 3 ways:
-// - Drop support for IE 6/7. :-) Set $legacy-support-for-ie6
-//   and $legacy-support-for-ie7 to false.
-// - (Preferred) Install the box-sizing polyfill and set the variable below to
-//   the absolute path URL to the boxsizing.htc file.
-//   @see https://github.com/Schepp/box-sizing-polyfill
-//   $box-sizing-polyfill-path: "/path/to/boxsizing.htc";
-// - Use the same CSS unit for grid and gutter width in resonsive-sidebars.scss
-//   (use px for both or use % for both) and set the box-sizing variable to content-box.
-//
-// Zen does not require special handling for IE8 or later. But Compass uses that
-// variable for a couple edge cases. We include it for completeness sake. See
-// the documentation at http://compass-style.org/reference/compass/support/
-$legacy-support-for-ie6: false;
-$legacy-support-for-ie7: false;
-$legacy-support-for-ie8: true;
-
-
-//
 // Font faces, stacks and sizes.
 //
 
@@ -71,7 +47,7 @@ $h6-font-size: 0.67 * $base-font-size;
 // find any of the fonts in the list.
 
 // First, let's create some font stacks.
-$times-new-roman: "Times New Roman", Times, Georgia, "DejaVu Serif", serif;
+$font_times_new_roman: "Times New Roman", Times, Georgia, "DejaVu Serif", serif;
 $times:           Times, "Times New Roman", Georgia, "DejaVu Serif", serif;
 $georgia:         Georgia, "Times New Roman", "DejaVu Serif", serif;
 
@@ -85,7 +61,7 @@ $arial:           Arial, Helvetica, "Nimbus Sans L", sans-serif;
 $courier:         "Courier New", "DejaVu Sans Mono", monospace, sans-serif;
 
 // Now create some variables for the font stacks we want to use on this site.
-$base-font-family: $verdana; // The font family set on the html element.
+$base_font_family: $verdana; // The font family set on the html element.
 $font-body:        $verdana;
 $font-monospace:   $courier;
 
@@ -94,6 +70,9 @@ $font-monospace:   $courier;
 // Colors, etc.
 //
 
+$color_white: #ffffff;
+$color_black: #000000;
+
 // The amount lists, blockquotes and comments are indented.
 $indent-amount: 30px;
 
@@ -101,12 +80,12 @@ $indent-amount: 30px;
 $nav-height: 3em;
 
 // Tab styling.
-$tabs-container-bg: #fff;
-$tabs-border: #bbb;
+$tabs_container_bg: #fff;
+$tabs_border: #bbb;
 
 // Sprite width
 // Once the sprites are generated, update the width of the non retina sprite
-$normal-sprite-width: 200px;
+$normal_sprite_width: 200px;
 
 
 // =============================================================================

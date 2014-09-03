@@ -56,7 +56,7 @@ $sprites_retina: sprite-map("sprites2x/*.png", $spacing: 30px);
       background-position: 0 $ypos;
     }
     // Hard coded width of the normal sprite image. There must be a smarter way to do this.
-    @include background-size($normal-sprite-width auto);
+    @include background-size($normal_sprite_width auto);
     background-image: sprite-url($sprites-retina);
   }
 }
