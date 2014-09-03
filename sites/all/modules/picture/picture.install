@@ -73,6 +73,8 @@ function picture_schema() {
 function picture_uninstall() {
   variable_del('picture_ckeditor_mappings');
   variable_del('picture_ckeditor_label');
+  variable_del('picture_updated_to_file_entity_2');
+  variable_del('picture_js_scope');
 }
 
 /**
@@ -141,4 +143,50 @@ function picture_update_7200() {
 function picture_update_7201() {
   module_load_include('admin.inc', 'picture');
   variable_set('picture_updated_to_file_entity_2', _picture_update_to_file_entity_2());
+}
+
+/**
+ * Update field formatters to the new colorbox settings.
+ */
+function picture_update_7202() {
+  $fields = field_read_fields(array('type' => 'image'));
+  foreach ($fields as $field) {
+    $instances = field_read_instances(array('field_id' => $field['id']));
+    foreach ($instances as $instance) {
+      foreach ($instance['display'] as $view_mode => $view_mode_settings) {
+        if ($view_mode_settings['type'] == 'picture') {
+          $colorbox_group = $instance['display'][$view_mode]['settings']['colorbox'];
+          $instance['display'][$view_mode]['settings']['colorbox_settings'] = array(
+            'colorbox_group' => $colorbox_group,
+            'colorbox_gallery' => 'none',
+            'colorbox_gallery_custom' => '',
+            'colorbox_caption' => 'none',
+            'colorbox_caption_custom' => '',
+            'colorbox_multivalue_index' => NULL,
+          );
+        }
+      }
+      field_update_instance($instance);
+    }
+  }
+}
+
+/**
+ * Update ckeditor settings to the new plugin path.
+ */
+function picture_update_7203() {
+  if (module_exists('ckeditor')) {
+    module_load_include('inc', 'ckeditor', 'includes/ckeditor.admin');
+    $result = db_select('ckeditor_settings', 'ck')
+      ->fields('ck')
+      ->execute()
+      ->fetchAll();
+    foreach ($result as $res) {
+      $res->settings = ckeditor_admin_values_to_settings(unserialize($res->settings));
+      db_update('ckeditor_settings')
+        ->fields(array('settings' => $res->settings))
+        ->condition('name', $res->name)
+        ->execute();
+    }
+  }
 }
