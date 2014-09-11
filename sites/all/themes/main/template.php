@@ -10,5 +10,5 @@
 
 // Adds row count to all views classes
 function main_preprocess_views_view(&$vars) {
-  $vars['classes_array'][] = 'view-rows-' . count($vars['view']->result);
+  $vars['classes_array'][] = 'view-count-' . count($vars['view']->result);
 }
