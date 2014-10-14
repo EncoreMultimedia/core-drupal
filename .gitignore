@@ -16,3 +16,4 @@ sites/all/themes/main/src/css
 *.sublime-project
 *.sublime-workspace
 node_modules
+npm-debug.log
