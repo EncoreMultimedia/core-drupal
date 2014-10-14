@@ -39,12 +39,6 @@ $h6-font-size: 0.67 * $base-font-size;
 // fonts which are common fonts available on most computer systems. The DejaVu
 // and Nimbus Sans fonts are commonly available on Linux systems where the MS
 // fonts are less common. Tahoma and Helvetica are also widely available.
-//
-// A user's web browser will look at the comma-separated list and will
-// attempt to use each font in turn until it finds one that is available
-// on the user's computer. The final "generic" font (sans-serif, serif or
-// monospace) hints at what type of font to use if the web browser doesn't
-// find any of the fonts in the list.
 
 // First, let's create some font stacks.
 $font_times_new_roman: "Times New Roman", Times, Georgia, "DejaVu Serif", serif;
@@ -67,7 +61,7 @@ $font-monospace:   $courier;
 
 
 // =============================================================================
-// Grayscale and Color Pallette
+// Grayscale and Color Palette
 // =============================================================================
 
 $color_white: #ffffff;
@@ -118,11 +112,11 @@ $media_mouse_droid:     300/16*1em;
 $media_mouse_droid_max: 299/16*1em;
 $media_yoda:            460/16*1em;
 $media_yoda_max:        459/16*1em;
-$media_ewok:            600/16*1em;
-$media_ewok_max:        599/16*1em;
+$media_ewok:            680/16*1em; // tablet
+$media_ewok_max:        679/16*1em;
 $media_luke:            760/16*1em;
 $media_luke_max:        759/16*1em;
-$media_vader:           860/16*1em;
+$media_vader:           860/16*1em; // desktop
 $media_vader_max:       859/16*1em;
 $media_jabba:           1000/16*1em;
 $media_jabba_max:       999/16*1em;
