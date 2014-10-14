@@ -1,0 +1,62 @@
+// Global heading styles
+h1, h2, h3, h4, h5, h6 {
+  // @TODO - Add colors
+}
+
+// 'used on' is only a single example
+// not an all inclusive list of cases
+
+// used on page titles
+h1 {
+  font-size: 23/16*1em;
+  line-height: 1.2;
+  color: $color_white;
+
+  @media all and (min-width: $media_vader) {
+    font-size: 25/16*1em;
+  }
+}
+
+// used on learn overview page
+h2 {
+  font-size: 18/16*1em;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+// used on home page doorways
+h3 {
+  font-size: 20/16*1em;
+  line-height: 1.2;
+  font-family: $montserrat;
+}
+
+// used on below-content lists on cont education
+h4 {
+  font-size: 12/16*1em;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+// used on footer newsletter title
+h5 {
+  font-size: 16/16*1em;
+  line-height: 1.2;
+  font-weight: normal;
+  font-family: $montserrat;
+}
+
+h6 {
+  // @TODO - WYSIWYG default maybe?
+}
+
+
+// specific headings
+
+#page-title {
+
+}
+
+.block-title {
+
+}
