@@ -11,7 +11,6 @@
 // - Last we define our custom mixins for this theme.
 //
 
-
 // =============================================================================
 // Variables
 // =============================================================================
@@ -41,58 +40,32 @@ $h6-font-size: 0.67 * $base-font-size;
 // fonts are less common. Tahoma and Helvetica are also widely available.
 
 // First, let's create some font stacks.
-$font_times_new_roman: "Times New Roman", Times, Georgia, "DejaVu Serif", serif;
-$times:           Times, "Times New Roman", Georgia, "DejaVu Serif", serif;
-$georgia:         Georgia, "Times New Roman", "DejaVu Serif", serif;
-
-$verdana:         Verdana, Tahoma, "DejaVu Sans", sans-serif;
-$tahoma:          Tahoma, Verdana, "DejaVu Sans", sans-serif;
-$helvetica:       Helvetica, Arial, "Nimbus Sans L", sans-serif;
-$arial:           Arial, Helvetica, "Nimbus Sans L", sans-serif;
+$open_sans:       "Open Sans", Tahoma, "DejaVu Sans", sans-serif;
+$montserrat:      "Montserrat Alternates", Tahoma, "DejaVu Sans", sans-serif;
 
 // For an explanation of why "sans-serif" is at the end of this list, see
 // http://meyerweb.com/eric/thoughts/2010/02/12/fixed-monospace-sizing/
 $courier:         "Courier New", "DejaVu Sans Mono", monospace, sans-serif;
 
 // Now create some variables for the font stacks we want to use on this site.
-$base_font_family: $verdana; // The font family set on the html element.
-$font_body:        $verdana;
+$base_font_family: $open_sans; // The font family set on the html element.
+$font_body:        $open_sans;
 $font-monospace:   $courier;
-
 
 // =============================================================================
 // Grayscale and Color Palette
 // =============================================================================
 
+// @TODO - need colors from designer
 $color_white: #ffffff;
 $color_black: #000000;
-
-// The amount lists, blockquotes and comments are indented.
-$indent-amount: 30px;
-
-// The height of the navigation container.
-$nav-height: 3em;
 
 // Tab styling.
 $tabs_container_bg: #fff;
 $tabs_border: #bbb;
 
 // =============================================================================
-// Base Sizes Defintions
-// =============================================================================
-
-// The amount lists, blockquotes and comments are indented.
-$indent_amount: 30px;
-
-// The height of the navigation container.
-$nav_height: 3em;
-
-// Sprite width
-// Once the sprites are generated, update the width of the non retina sprite
-$normal_sprite_width: 162px;
-
-// =============================================================================
-// Base Spacing, Gutters, and Margins
+// Base Sizing, Gutters, and Margins
 // =============================================================================
 
 // Gutters
@@ -103,6 +76,10 @@ $gutter_desktop:       20/16*1em;
 $gutter_inner_mobile:  22/16*1em;
 $gutter_inner_tablet:  54/16*1em;
 $gutter_inner_desktop: 84/16*1em;
+
+// Sprite width
+// Once the sprites are generated, update the width of the non retina sprite
+$normal_sprite_width: 162px;
 
 // =============================================================================
 // Media Queries
@@ -139,6 +116,5 @@ $media_deathstar_max:   1599/16*1em;
 @import "compass/css3";
 // Helps set up a vertical rhythm.
 @import "compass/typography/vertical_rhythm";
-
 // Now we add our custom helper mixins.
 @import "mixins";

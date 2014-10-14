@@ -69,6 +69,15 @@ stylesheets[all][] = css/styles.css
 scripts[] = js/script.js
 
 
+; Google Fonts for @fontyourface module
+
+fonts[google_fonts_api][] = "Montserrat Alternates&subset=latin#700"
+fonts[google_fonts_api][] = "Montserrat Alternates&subset=latin#regular"
+fonts[google_fonts_api][] = "Open Sans&subset=latin#300"
+fonts[google_fonts_api][] = "Open Sans&subset=latin#600"
+fonts[google_fonts_api][] = "Open Sans&subset=latin#700"
+fonts[google_fonts_api][] = "Open Sans&subset=latin#italic"
+
 
 ; This section lists the regions defined in Zen's default page.tpl.php and
 ; maintenance-page.tpl.php files. The name in brackets is the machine name of
