@@ -37,24 +37,40 @@
 //Disabled till needed so sass will compile
 
 $sprites: sprite-map("sprites/*.png", $spacing: 15px);
-$sprites_retina: sprite-map("sprites2x/*.png", $spacing: 30px);
+$sprites_2x: sprite-map("sprites2x/*.png", $spacing: 30px);
+$sprites_3x: sprite-map("sprites3x/*.png", $spacing: 45px);
+
+$sprite_url: sprite-url($sprites);
+$sprite_2x_url: sprite-url($sprites_2x);
+$sprite_3x_url: sprite-url($sprites_3x);
 
 @mixin sprite-background($name) {
-  background-image: sprite-url($sprites);
+  background-image: $sprite_url;
   background-position: sprite-position($sprites, $name);
   background-repeat: no-repeat;
   display: block;
   height: image-height(sprite-file($sprites, $name));
   width: image-width(sprite-file($sprites, $name));
-  @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
+  @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
     // Workaround for https://gist.github.com/2140082
-    @if (sprite-position($sprites, $name) != sprite-position($sprites_retina, $name)) {
-      $ypos: round(nth(sprite-position($sprites_retina, $name), 2) / 2);
+    @if (sprite-position($sprites, $name) != sprite-position($sprites_2x, $name)) {
+      $ypos: round(nth(sprite-position($sprites_2x, $name), 2) / 2);
       background-position: 0 $ypos;
     }
     // Hard coded width of the normal sprite image. There must be a smarter way to do this.
     @include background-size($normal_sprite_width auto);
-    background-image: sprite-url($sprites-retina);
+    background-image: $sprite_2x_url;
+  }
+
+  @media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 288dpi), (min-resolution: 3dppx) {
+    // Workaround for https://gist.github.com/2140082
+    @if (sprite-position($sprites, $name) != sprite-position($sprites_3x, $name)) {
+      $ypos: round(nth(sprite-position($sprites_3x, $name), 2) / 3);
+      background-position: 0 $ypos;
+    }
+    // Hard coded width of the normal sprite image. There must be a smarter way to do this.
+    @include background-size($normal_sprite_width auto);
+    background-image: $sprite_3x_url;
   }
 }
 */

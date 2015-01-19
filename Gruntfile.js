@@ -70,6 +70,31 @@ module.exports = function (grunt) {
       }
     },
 
+    pixrem: {
+      options: {
+        rootvalue: '16px',
+        replace: true
+      },
+      dist: {
+        src: 'css/styles-ie.css',
+        dest: 'css/styles-ie.css'
+      }
+    },
+
+    stripmq: {
+      //Viewport options
+      options: {
+        width: 1000,
+        type: 'screen'
+      },
+      all: {
+        files: {
+          //follows the pattern 'destination': ['source']
+          'css/styles-ie.css': ['src/css/styles.css']
+        }
+      }
+    },
+
     // Watch task: https://npmjs.org/package/grunt-contrib-watch
     watch: {
       images: {
@@ -116,11 +141,13 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-stripmq');
+  grunt.loadNpmTasks('grunt-pixrem');
 
   // Set base to main theme
   grunt.file.setBase('sites/all/themes/main/'),
 
   // Default task(s).
   grunt.registerTask('default', ['concurrent:watch']);
-  grunt.registerTask('build', ['clean', 'compass:dist', 'imagemin', 'autoprefixer', 'cssmin', 'uglify']);
+  grunt.registerTask('build', ['clean', 'compass:dist', 'imagemin', 'autoprefixer', 'stripmq', 'pixrem', 'cssmin', 'uglify']);
 };

@@ -20,12 +20,16 @@
   <?php if ($default_mobile_metatags): ?>
     <meta name="MobileOptimized" content="width">
     <meta name="HandheldFriendly" content="true">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php endif; ?>
   <meta http-equiv="cleartype" content="on">
 
   <?php print $styles; ?>
   <?php print $scripts; ?>
+  <!--[if lt IE 9]>
+    <link rel="stylesheet" href="/sites/all/themes/main/css/styles-ie.css">
+    <script src="/sites/all/libraries/selectivizr/selectivizr.js"></script>
+  <![endif]-->
   <?php if ($add_html5_shim and !$add_respond_js): ?>
     <!--[if lt IE 9]>
     <script src="<?php print $base_path . $path_to_zen; ?>/js/html5.js"></script>

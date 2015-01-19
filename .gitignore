@@ -7,6 +7,7 @@ robots.txt
 .sass-cache/
 sprites-*.png
 sprites2x-*.png
+sprites3x-*.png
 *.swp
 *.swo
 sites/all/themes/main/css
@@ -16,3 +17,4 @@ sites/all/themes/main/src/css
 *.sublime-project
 *.sublime-workspace
 node_modules
+npm-debug.log

@@ -1,15 +1,17 @@
 {
   "name": "core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-contrib-compass": "~1.0.1",
     "grunt-contrib-cssmin": "~0.10.0",
-    "grunt-contrib-imagemin": "~0.8.1",
+    "grunt-contrib-imagemin": "~0.9.2",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-uglify": "~0.6.0",
     "grunt-concurrent": "~1.0.0",
-    "grunt-autoprefixer": "~1.0.1"
+    "grunt-autoprefixer": "~2.0.0",
+    "grunt-stripmq": "0.0.6",
+    "grunt-pixrem": "~0.1.2"
   }
 }

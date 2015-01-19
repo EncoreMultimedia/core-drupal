@@ -157,10 +157,6 @@ p,
 pre {
   margin: rhythm(1) 0;
 }
-blockquote {
-  /* Also indent the quote on both sides. */
-  margin: rhythm(1) $indent-amount;
-}
 
 /**
  * Address variable `h1` font-size and margin within `section` and `article`
@@ -291,14 +287,14 @@ ul {
   }
 }
 dd {
-  margin: 0 0 0 $indent-amount; /* LTR */
+  margin: 0; /* LTR */
 }
 
 /* Address paddings set differently in IE 6/7. */
 menu,
 ol,
 ul {
-  padding: 0 0 0 $indent-amount; /* LTR */
+  padding: 0; /* LTR */
 }
 
 /**
