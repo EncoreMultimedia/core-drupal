@@ -11,7 +11,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,                  // Enable dynamic expansion
           cwd: 'src/images',             // Src matches are relative to this path
-          src: ['**/*.{png,jpg,gif}', "!sprites/**/*.{png,jpg,gif}", "!sprites2x/**/*.{png,jpg,gif}"],   // Actual patterns to match
+          src: ['**/*.{png,jpg,gif}', "!sprites/**/*.{png,jpg,gif}", "!sprites2x/**/*.{png,jpg,gif}", "!sprites3x/**/*.{png,jpg,gif}"],   // Actual patterns to match
           dest: 'images/'                // Destination path prefix
         }]
       }
@@ -38,6 +38,7 @@ module.exports = function (grunt) {
     autoprefixer: {
       options: {
         //diff: true,
+        map: true,
       },
       target: {
         expand: true,
@@ -107,7 +108,7 @@ module.exports = function (grunt) {
       },
        css: {
          files: ['src/css/**/*.css'],
-         tasks: ['autoprefixer','cssmin'],
+         tasks: ['autoprefixer'],
 
        },
       // LiveReload whenever specified files change,
