@@ -76,6 +76,21 @@ fonts[google_fonts_api][] = "Open Sans&subset=latin#600"
 fonts[google_fonts_api][] = "Open Sans&subset=latin#700"
 fonts[google_fonts_api][] = "Open Sans&subset=latin#italic"
 
+; Breakpoints
+
+breakpoints[atat] = (min-width: 68.75em)
+multipliers[atat][] = 2x
+breakpoints[jabba] = (min-width: 60em)
+multipliers[jabba][] = 2x
+breakpoints[luke] = (min-width: 47.5em)
+multipliers[luke][] = 2x
+breakpoints[ewok] = (min-width: 42.5em)
+multipliers[ewok][] = 2x
+breakpoints[yoda] = (min-width: 28.75em)
+multipliers[yoda][] = 2x
+breakpoints[yoda_max] = (max-width: 28.6875em)
+multipliers[yoda_max][] = 2x
+
 
 ; This section lists the regions defined in Zen's default page.tpl.php and
 ; maintenance-page.tpl.php files. The name in brackets is the machine name of
