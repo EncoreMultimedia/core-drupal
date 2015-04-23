@@ -11,8 +11,26 @@ module.exports = function (grunt) {
         files: [{
           expand: true,                  // Enable dynamic expansion
           cwd: 'src/images',             // Src matches are relative to this path
-          src: ['**/*.{png,jpg,gif}', "!sprites/**/*.{png,jpg,gif}", "!sprites2x/**/*.{png,jpg,gif}", "!sprites3x/**/*.{png,jpg,gif}"],   // Actual patterns to match
-          dest: 'images/'                // Destination path prefix
+          src: ['**/*.{jpg,gif}'],       // Actual patterns to match
+          dest: 'images/',               // Destination path prefix
+        }],
+        options: {                       // Target options
+          optimizationLevel: 7
+        }
+      }
+    },
+
+    pngmin: {
+      compile: {
+        options: {
+          ext: '.png',
+          quality: '75-85'
+        },
+        files: [{
+          expand: true, // required option
+          src: ['**/*.png', "!sprites/**/*.png", "!sprites2x/**/*.png", "!sprites3x/**/*.png"],
+          cwd: 'src/images', // required option
+          dest: 'images/'
         }]
       }
     },
@@ -100,7 +118,7 @@ module.exports = function (grunt) {
     watch: {
       images: {
         files: ['src/images/*.{png,jpg,gif}'],
-        tasks: ['imagemin'],
+        tasks: ['imagemin', 'pngmin'],
       },
       js: {
         files: ['src/js/*.js'],
@@ -144,11 +162,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-stripmq');
   grunt.loadNpmTasks('grunt-pixrem');
+  grunt.loadNpmTasks('grunt-pngmin');
 
   // Set base to main theme
   grunt.file.setBase('sites/all/themes/main/'),
 
   // Default task(s).
   grunt.registerTask('default', ['concurrent:watch']);
-  grunt.registerTask('build', ['clean', 'compass:dist', 'imagemin', 'autoprefixer', 'stripmq', 'pixrem', 'cssmin', 'uglify']);
+  grunt.registerTask('build', ['clean', 'compass:dist', 'imagemin', 'pngmin', 'autoprefixer', 'stripmq', 'pixrem', 'cssmin', 'uglify']);
 };
