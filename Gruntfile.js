@@ -66,6 +66,14 @@ module.exports = function (grunt) {
       },
     },
 
+    // Combines Media Queries on Output
+    combine_mq: {
+      default_options: {
+        expand: true,
+        src: 'css/*.css',
+      }
+    },
+
      // Minifies CSS outputted by Compass
     cssmin: {
       minify: {
@@ -84,7 +92,7 @@ module.exports = function (grunt) {
       },
       my_target: {
         files: {
-          'js/script.js': ['src/js/*.js', 'src/js/*.js']
+          'js/script.js': ['src/js/*.js']
         }
       }
     },
@@ -160,6 +168,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-combine-mq');
   grunt.loadNpmTasks('grunt-stripmq');
   grunt.loadNpmTasks('grunt-pixrem');
   grunt.loadNpmTasks('grunt-pngmin');
@@ -169,5 +178,5 @@ module.exports = function (grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['concurrent:watch']);
-  grunt.registerTask('build', ['clean', 'compass:dist', 'imagemin', 'pngmin', 'autoprefixer', 'stripmq', 'pixrem', 'cssmin', 'uglify']);
+  grunt.registerTask('build', ['clean', 'compass:dist', 'imagemin', 'pngmin', 'autoprefixer', 'combine_mq', 'stripmq', 'pixrem', 'cssmin', 'uglify']);
 };

@@ -1,19 +1,6 @@
-// Global heading styles
-h1, h2, h3, h4, h5, h6 {
-  // @TODO - Add colors
-}
-
-// 'used on' is only a single example
-// not an all inclusive list of cases
-
 h1 {
   font-size: 23/16*1em;
   line-height: 1.2;
-  color: $color_encore_blue;
-
-  @media all and (min-width: $media_vader) {
-    font-size: 25/16*1em;
-  }
 }
 
 h2 {
@@ -25,18 +12,6 @@ h2 {
 h3 {
   font-size: 20/16*1em;
   line-height: 1.2;
-}
-
-h4 {
-  font-size: 12/16*1em;
-  line-height: 1.4;
-  font-weight: 600;
-}
-
-h5 {
-  font-size: 16/16*1em;
-  line-height: 1.2;
-  font-weight: normal;
 }
 
 // specific headings
