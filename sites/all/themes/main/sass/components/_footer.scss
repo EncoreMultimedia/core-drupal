@@ -1,0 +1,14 @@
+.block-encore-copyright {
+
+  .separator {
+    margin: 0 em(10, true);
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
