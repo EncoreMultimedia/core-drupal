@@ -1,0 +1,422 @@
+<?php
+/**
+ * @file
+ * Module file for encore_contact.
+ */
+
+/**
+ * @defgroup encore_contact Example: Block
+ * @ingroup examples
+ * @{
+ * Demonstrates code creation of blocks.
+ *
+ * This is an example outlining how a module can define blocks that can be
+ * displayed on various pages of a site, or how to alter blocks provided by
+ * other modules.
+ */
+
+/**
+ * Implements hook_menu().
+ *
+ * This hook creates a link for the configuration form.
+ */
+function encore_contact_menu() {
+  $items = array();
+
+  $items['admin/config/system/contact-information'] = array(
+    'title' => 'Contact Information',
+    'description' => 'Configure Site Contact Information',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('encore_contact_admin'),
+    'access arguments' => array('administer encore_contact settings'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function encore_contact_permission() {
+  return array(
+    'administer encore_contact settings' => array(
+      'title' => t('Administer Settings for the Encore Contact module'),
+      'restrict access' => TRUE,
+    )
+  );
+}
+
+function encore_contact_admin() {
+  $form = array();
+
+  $form['encore_contact_description'] = array(
+    '#prefix' => '<p>',
+    '#markup' => 'The settings below affect the contact blocks on the website.',
+    '#suffix' => '</p>',
+  );
+  $form['encore_contact_google_api'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Google API'),
+    '#size' => 60,
+    '#description' => t('For generating IFrames for the address.'),
+    '#default_value' => variable_get('encore_contact_google_api'),
+  );
+  $form['encore_contact_address'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Address'),
+    '#size' => 60,
+    '#default_value' => variable_get('encore_contact_address'),
+  );
+  $form['encore_contact_city'] = array(
+    '#type' => 'textfield',
+    '#title' => t('City'),
+    '#size' => 60,
+    '#default_value' => variable_get('encore_contact_city'),
+  );
+  $form['encore_contact_state'] = array(
+    '#type' => 'select',
+    '#title' => t('State'),
+    '#options' => array(
+      'AL' => t('AL'),
+      'AK' => t('AK'),
+      'AZ' => t('AZ'),
+      'AR' => t('AR'),
+      'CA' => t('CA'),
+      'CO' => t('CO'),
+      'CT' => t('CT'),
+      'DE' => t('DE'),
+      'FL' => t('FL'),
+      'GA' => t('GA'),
+      'HI' => t('HI'),
+      'ID' => t('ID'),
+      'IL' => t('IL'),
+      'IN' => t('IN'),
+      'IA' => t('IA'),
+      'KS' => t('KS'),
+      'KY' => t('KY'),
+      'LA' => t('LA'),
+      'ME' => t('ME'),
+      'MD' => t('MD'),
+      'MA' => t('MA'),
+      'MI' => t('MI'),
+      'MN' => t('MN'),
+      'MS' => t('MS'),
+      'MO' => t('MO'),
+      'MT' => t('MT'),
+      'NE' => t('NE'),
+      'NV' => t('NV'),
+      'NH' => t('NH'),
+      'NJ' => t('NJ'),
+      'NM' => t('NM'),
+      'NY' => t('NY'),
+      'NC' => t('NC'),
+      'ND' => t('ND'),
+      'OH' => t('OH'),
+      'OK' => t('OK'),
+      'OR' => t('OR'),
+      'PA' => t('PA'),
+      'RI' => t('RI'),
+      'SC' => t('SC'),
+      'SD' => t('SD'),
+      'TN' => t('TN'),
+      'TX' => t('TX'),
+      'UT' => t('UT'),
+      'VT' => t('VT'),
+      'VA' => t('VA'),
+      'WA' => t('WA'),
+      'WV' => t('WV'),
+      'WI' => t('WI'),
+      'WY' => t('WY'),
+    ),
+    '#default_value' => variable_get('encore_contact_state', "TX"),
+  );
+  $form['encore_contact_zip'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Zip Code'),
+    '#size' => 7,
+    '#default_value' => variable_get('encore_contact_zip'),
+  );
+  $form['encore_contact_phone'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Phone Number'),
+    '#size' => 60,
+    '#default_value' => variable_get('encore_contact_phone'),
+  );
+  $form['encore_contact_toll_free'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Toll Free Number'),
+    '#size' => 60,
+    '#default_value' => variable_get('encore_contact_toll_free'),
+  );
+  $form['encore_contact_fax'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Fax Number'),
+    '#size' => 60,
+    '#default_value' => variable_get('encore_contact_fax'),
+  );
+  $form['encore_contact_image'] = array(
+    '#type' => 'managed_file',
+    '#title' => t('Image'),
+    '#upload_location' => 'public://encore_contact_block',
+    '#default_value' => variable_get('encore_contact_image'),
+    '#upload_validators' => array(
+      'file_validate_extensions' => array('gif png jpg jpeg'),
+    ),
+  );
+  $form['encore_contact_image_style'] = array(
+    '#type' => 'select',
+    '#title' => t('Image Style'),
+    '#options' => image_style_options(FALSE),
+    '#default_value' => variable_get('encore_contact_image_style'),
+  );
+  $form['encore_contact_num_blocks'] = array(
+    '#type' => 'select',
+    '#title' => t('Number of Available Blocks'),
+    '#options' => range(0, 10),
+    '#default_value' => variable_get('encore_contact_num_blocks', 1),
+  );
+
+  $form['#submit'][] = 'encore_contact_admin_submit';
+
+  return system_settings_form($form);
+}
+
+function encore_contact_admin_submit($form, $form_state) {
+  if (isset($form_state['values']['encore_contact_image'])) {
+    //remove existing image while clicking remove button
+    if ($form_state['values']['encore_contact_image'] == 0){
+      //get existing file id to delete
+      $image_exist_file = file_load($form_state['values']['encore_contact_image']);
+      if (!empty($image_exist_file)) {
+        //delete file usage
+        file_usage_delete($image_exist_file, 'encore_contact', 'encore_contact', $image_exist_id);
+        // The file_delete() function takes a file object and checks to see if
+        // the file is being used by any other modules. If it is the delete
+        // operation is canceled, otherwise the file is deleted.
+        file_delete($image_exist_file, TRUE);
+      }
+    }
+    else {
+      //adding image
+      $image = file_load($form_state['values']['encore_contact_image']);
+      if (!empty($image->fid)) {
+        //get currently uploaded file id
+        $file_id = $image->fid;
+        //setting file id to its variable
+        file_usage_add($image, 'encore_contact', 'encore_contact', $file_id);
+        //make file status as permanent
+        $image->status = FILE_STATUS_PERMANENT;
+        file_save($image);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function encore_contact_token_info() {
+  $info = array();
+
+  $info['types'] = array(
+    'encore-contact' => array(
+      'name' => t('Encore Contact'),
+      'description' => t('Encore Contact Information Tokens.'),
+    ),
+  );
+
+  $info['tokens'] = array(
+    'encore-contact' => array(
+      'address' => array(
+        'name' => t('Address'),
+      ),
+      'city' => array(
+        'name' => t('City'),
+      ),
+      'state' => array(
+        'name' => t('State'),
+      ),
+      'zip' => array(
+        'name' => t('Zip Code'),
+      ),
+      'full_address' => array(
+        'name' => t('Full Address'),
+      ),
+      'phone' => array(
+        'name' => t('Phone'),
+      ),
+      'toll_free' => array(
+        'name' => t('Toll Free'),
+      ),
+      'fax' => array(
+        'name' => t('Fax'),
+      ),
+      'image' => array(
+        'name' => t('Image'),
+      ),
+      'iframe' => array(
+        'name' => t('IFrame'),
+        'description' => 'A Google Map IFrame',
+      ),
+      'directions' => array(
+        'name' => t('Directions Link'),
+      ),
+    ),
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function encore_contact_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+
+  if ($type == 'encore-contact') {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'address':
+          $replacements[$original] = '<span class="address">' . variable_get('encore_contact_address') . '</span>';
+          break;
+        case 'city':
+          $replacements[$original] = '<span class="city">' . variable_get('encore_contact_city') . '</span>';
+          break;
+        case 'state':
+          $replacements[$original] = '<span class="state">' . variable_get('encore_contact_state') . '</span>';
+          break;
+        case 'zip':
+          $replacements[$original] = '<span class="zip">' . variable_get('encore_contact_zip') . '</span>';
+          break;
+        case 'full_address':
+          $replacements[$original] = '<span class="address">' . variable_get('encore_contact_address') . '</span> <span class="city">' . variable_get('encore_contact_city') . '</span>, <span class="state">' . variable_get('encore_contact_state') . '</span> <span class="zip">' . variable_get('encore_contact_zip') . '</span>';
+          break;
+        case 'phone':
+          $replacements[$original] = '<span class="phone">' . variable_get('encore_contact_phone') . '</span>';
+          break;
+        case 'toll_free':
+          $replacements[$original] = '<span class="toll-free">' . variable_get('encore_contact_toll_free') . '</span>';
+          break;
+        case 'fax':
+          $replacements[$original] = '<span class="fax">' . variable_get('encore_contact_fax') . '</span>';
+          break;
+        case 'image':
+          if($file = file_load(variable_get('encore_contact_image'))) {
+            $image_style = array(
+              'style_name' => variable_get('encore_contact_image_style'),
+              'path' => $file->uri,
+              'height' => NULL,
+              'width' => NULL,
+            );
+            $replacements[$original] = theme_image_style($image_style);
+          }
+          break;
+        case 'iframe':
+          $address_query = variable_get('encore_contact_address') . '+' . variable_get('encore_contact_city') . '+' . variable_get('encore_contact_state') . ' ' . variable_get('encore_contact_zip');
+          $address_query = str_replace(' ', '+', $address_query);
+
+          $api_key = variable_get('encore_contact_google_api');
+
+          $iframe = '<iframe src="https://www.google.com/maps/embed/v1/place?key=' . $api_key . '&q=' . $address_query .'" frameborder="0" style="border:0" allowfullscreen></iframe>';
+
+          $replacements[$original] = $iframe;
+          break;
+        case 'directions':
+          $address_query = variable_get('encore_contact_address') . '+' . variable_get('encore_contact_city') . '+' . variable_get('encore_contact_state') . ' ' . variable_get('encore_contact_zip');
+          $address_query = str_replace(' ', '+', $address_query);
+
+          $directions_url = 'https://www.google.com/maps/place/' . $address_query;
+
+          $directions_link = l(t('Get Directions'), $directions_url, array('attributes' => array('target' => '_blank', 'class' => array('directions'))));
+          $replacements[$original] = $directions_link;
+          break;
+      }
+    }
+  }
+  // An array of replacement values keyed by original token string.
+  return $replacements;
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * This hook declares what blocks are provided by the module.
+ */
+function encore_contact_block_info() {
+
+  for($i=1; $i<=variable_get('encore_contact_num_blocks', 1); $i++){
+    $blocks[$i] = array(
+      // info: The name of the block.
+      'info' => t('Encore Contact Block ' . $i),
+      'cache' => DRUPAL_CACHE_GLOBAL,
+    );
+  }
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function encore_contact_block_configure($delta) {
+  $form = array();
+  $form['encore_contact_block_content'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Block Contents'),
+    '#default_value' => variable_get('encore_contact_block_content_' . $delta),
+  );
+
+  $form['token_help'] = array(
+    '#theme' => 'token_tree_link',
+    '#token_types' => array('encore-contact'),
+  );
+
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function encore_contact_block_save($delta, $edit) {
+  variable_set('encore_contact_block_content_' . $delta, $edit['encore_contact_block_content']);
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * This hook generates the contents of the blocks themselves.
+ */
+function encore_contact_block_view($delta = '') {
+  // The $delta parameter tells us which block is being requested.
+  $block_content = variable_get('encore_contact_block_content_' . $delta);
+  $replaced_content = token_replace($block_content, array('encore-contact'));
+
+  $block = array(
+    'subject' => '',
+    'content' => array(
+      '#markup' => $replaced_content,
+    ),
+  );
+
+  return $block;
+}
+
+/**
+ * Returns block contents
+ */
+function encore_contact_contents($delta) {
+  $block = array();
+
+  $block = array(
+    'content' => array(
+      '#markup' => variable_get('encore_contact_phone'),
+    ),
+  );
+
+  return $block;
+}
+
+/**
+ * @} End of "defgroup encore_contact".
+ */

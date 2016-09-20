@@ -1,0 +1,208 @@
+<?php
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function picture_background_formatter_field_formatter_info() {
+  $formatters = array();
+  $mappings = array_keys(picture_get_mapping_options());
+  if ($mappings) {
+    $formatters['picture_background_formatter'] = array(
+      'label' => t('Picture Background Formatter'),
+      'field types' => array('image'),
+      'settings' => array(
+        'picture_mapping' => reset($mappings),
+        'selector' => '',
+      ),
+    );
+  }
+
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function picture_background_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $options = picture_get_mapping_options();
+  if ($options) {
+    $element['picture_mapping'] = array(
+      '#title'         => t('Picture mapping'),
+      '#type'          => 'select',
+      '#default_value' => isset($settings['picture_mapping']) ? $settings['picture_mapping'] : '',
+      '#required'      => TRUE,
+      '#options'       => picture_get_mapping_options(),
+    );
+
+    $element['selector'] = array(
+      '#type'           => 'textfield',
+      '#title'          => t('Selector'),
+      '#description'    => t('CSS Selector for background image.'),
+      '#default_value'  => $settings['selector'],
+    );
+  }
+  // No picture mappings.
+  else {
+    $element['picture_mapping'] = array(
+      '#title'  => t('Picture mapping'),
+      '#type'   => 'item',
+      '#markup' => t(
+        'There are no picture groups defined. !create_link.',
+        array('!create_link' => l(t('Create a picture mapping'), 'admin/config/media/picture/add'))
+      ),
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function picture_background_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $summary = array();
+
+  $picture_mapping = picture_mapping_load($settings['picture_mapping']);
+  if ($picture_mapping) {
+    $summary[] = t('Picture mapping: @picture_mapping', array('@picture_mapping' => $picture_mapping->label()));
+    $summary[] = t('Selector: @selector', array('@selector' => $settings['selector']));
+  }
+  else {
+    $summary[] = t('Select a responsive image mapping.');
+  }
+
+  return implode('<br />', $summary);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function picture_background_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $settings = $display['settings'];
+  $css = "";
+
+  foreach ($items as $delta => $item) {
+    $css .= picture_background_formatter_generate_background_css($item['uri'], $settings['picture_mapping'], $settings['selector']);
+  }
+
+  drupal_add_css($css, array('type' => 'inline', 'every_page' => 'false'));
+
+  return false;
+}
+
+/**
+ * CSS Generator Helper Function
+ *
+ * @param      string           $original_uri     (URI of an image)
+ * @param      picture_mapping  $picture_mapping  (desired picture mapping)
+ * @param      string           $selector         (CSS selector to target)
+ *
+ * @return     string  (generated background image CSS)
+ *
+ * @see        picture_background_formatter_field_formatter_view()
+ */
+function picture_background_formatter_generate_background_css($original_uri, $picture_mapping, $selector) {
+  $breakpoints = picture_background_formatter_picture_breakpoint_data($picture_mapping);
+  $css = "";
+
+  foreach($breakpoints as $breakpoint_size => $breakpoint_styles) {
+    if ($breakpoint_size != "default") {
+      $css .= '@media ' . $breakpoint_size . ' {';
+    }
+
+    foreach($breakpoint_styles as $multiplier => $style_info) {
+      $multiplier = substr($multiplier, 0, 1);
+
+      if($style_info['image_style'] == "_original image_") {
+        $url = file_create_url($original_uri);
+      } else {
+        $url = image_style_url($style_info['image_style'], $original_uri);
+      }
+
+      if($multiplier != 1) {
+        $css .= '@media (-webkit-min-device-pixel-ratio: ' . $multiplier . '), (min-resolution: ' . $multiplier*96 . 'dpi), (min-resolution: ' . $multiplier . 'dppx) {';
+      }
+
+      $css .= $selector . ' {background-image: url(' . $url . ');}';
+
+      if($multiplier != 1) {
+        $css .= '}';
+      }
+    }
+
+    if ($breakpoint_size != "default") {
+      $css .= '}';
+    }
+  }
+
+  return $css;
+}
+
+/**
+ * Queries the breakpoint data for the requested picture mapping
+ *
+ * @param      picture_mapping  $picture_mapping  (desired picture mapping)
+ *
+ * @return     array   (an array of breakpoints, their sizes, and multipliers)
+ *
+ * @see        picture_background_formatter_generate_background_css()
+ */
+function picture_background_formatter_picture_breakpoint_data($picture_mapping) {
+  $mapping = picture_mapping_load($picture_mapping);
+  $mapping_breakpoints = array_reverse(picture_get_mapping_breakpoints($mapping));
+  $picture_breakpoint_data = array();
+
+  foreach($mapping_breakpoints as $breakpoint_name => $breakpoint_values) {
+    if ($breakpoint_values === reset($mapping_breakpoints)) {
+      $picture_breakpoint_data["default"] = $mapping_breakpoints[$breakpoint_name];
+    } else {
+      $breakpoint_data = breakpoints_breakpoint_load_by_fullkey($breakpoint_name);
+      $picture_breakpoint_data[$breakpoint_data->breakpoint] = $mapping_breakpoints[$breakpoint_name];
+    }
+  }
+
+  return $picture_breakpoint_data;
+}
+
+/**
+ * Implements hook_help().
+ */
+function picture_background_formatter_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#picture_background_formatter':
+
+      $filepath = dirname(__FILE__) . '/README.md';
+      if (file_exists($filepath)) {
+        $readme = file_get_contents($filepath);
+      }
+      else {
+        $filepath = dirname(__FILE__) . '/README.txt';
+        if (file_exists($filepath)) {
+          $readme = file_get_contents($filepath);
+        }
+      }
+      if (!isset($readme)) {
+        return NULL;
+      }
+      if (module_exists('markdown')) {
+        $filters = module_invoke('markdown', 'filter_info');
+        $info = $filters['filter_markdown'];
+
+        if (function_exists($info['process callback'])) {
+          $output = $info['process callback']($readme, NULL);
+        }
+        else {
+          $output = '<pre>' . $readme . '</pre>';
+        }
+      }
+      else {
+        $output = '<pre>' . $readme . '</pre>';
+      }
+
+      return $output;
+  }
+}

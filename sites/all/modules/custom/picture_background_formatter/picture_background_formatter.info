@@ -1,0 +1,5 @@
+name = Picture Background Formatter
+description = Provides an image field formatter to generate responsive background images.
+core = 7.x
+dependencies[] = picture
+package = Picture
