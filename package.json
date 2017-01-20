@@ -13,7 +13,7 @@
     "grunt-contrib-uglify": "~2.0.0",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-pixrem": "~0.1.2",
-    "grunt-pngmin": "~1.1.0",
+    "grunt-pngmin": "~1.2.0",
     "grunt-stripmq": "0.0.6"
   }
 }
