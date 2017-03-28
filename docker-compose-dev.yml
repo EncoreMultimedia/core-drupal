@@ -3,8 +3,8 @@ version: "2"
 services:
   php:
     volumes:
-      - d4d-unison-sync:/var/www/html:rw # Replace volume to this to use docker-sync for macOS users
+      - attabox-unison-sync:/var/www/html:rw # Replace volume to this to use docker-sync for macOS users
 
 volumes:
-  d4d-unison-sync:
+  attabox-unison-sync:
     external: true

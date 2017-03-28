@@ -1,7 +1,7 @@
 version: '2'
 
 syncs:
-  d4d-unison-sync:
+  attabox-unison-sync:
     src: './'
     dest: '/var/www/html'
     sync_args: '-prefer newer'
